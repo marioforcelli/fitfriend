@@ -1,13 +1,14 @@
 from dataclasses import dataclass
+from typing import Optional
 
 
 @dataclass
 class User:
-    id: int | None
-    name: str
+    full_name: str
     email: str
     weight: float
     height: float
     birth_date: str
-    created_at: str
-    updated_at: str
+    updated_at: Optional[str] = None
+    created_at: Optional[str] = None
+    id: Optional[int] = None

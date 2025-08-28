@@ -2,6 +2,7 @@ from src.infra.repositories.user_repository import UserRepository
 from src.domain.repositories.user_repository import IUserRepository
 from src.domain.entities.user import User
 from src.domain.use_cases.user import IUserUseCase
+from typing import Optional
 
 
 class UserUseCases(IUserUseCase):

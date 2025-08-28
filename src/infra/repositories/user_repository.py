@@ -1,6 +1,7 @@
 from src.domain.repositories.user_repository import IUserRepository
-from domain.entities.user import User
+from src.domain.entities.user import User
 from src.infra.db.db_config import Database
+from typing import Optional
 
 
 class UserRepository(IUserRepository):
@@ -12,17 +13,17 @@ class UserRepository(IUserRepository):
 
     def save(self, user: User) -> User:
 
-        query = "INSERT INTO users (name, email, weight, height, birth_date, created_at, updated_at) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id;"
+        query = "INSERT INTO users (full_name, email, weight, height, birth_date) VALUES (%s, %s, %s, %s, %s) RETURNING id;"
         params = (
-            user.name,
+            user.full_name,
             user.email,
             user.weight,
             user.height,
-            user.birth_date,
-            user.created_at,
-            user.updated_at,
+            user.birth_date
         )
-        user.id = self.db.execute_query(query, params)[0][0]
+        print(query, params)
+        id = self.db.execute_query(query, params)[0][0]
+        print(id)
         return user
 
     def find_by_email(self, email: str) -> User | None:
