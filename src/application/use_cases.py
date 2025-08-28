@@ -1,4 +1,3 @@
-from src.infra.repositories.user_repository import UserRepository
 from src.domain.repositories.user_repository import IUserRepository
 from src.domain.entities.user import User
 from src.domain.use_cases.user import IUserUseCase
@@ -13,7 +12,7 @@ class UserUseCases(IUserUseCase):
         pass
         # return self.user_repository.find_by_email()
 
-    def get_user_by_email(self, email: str) -> User | None:
+    def get_user_by_email(self, email: str) -> Optional[User]:
         pass
 
     def get_user_by_id(self, user_id: int) -> Optional[User]:
