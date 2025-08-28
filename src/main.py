@@ -15,8 +15,8 @@ app = fastapi.FastAPI()
 async def http_exception_handler(request: fastapi.Request, exc: fastapi.HTTPException):
     success = False if exc.status_code != 200 else True
     return JSONResponse(
-        status_code=exc.status_code,
-        content={"success": success, "error": exc.detail}
+        status_code=exc.status_code, content={"success": success, "error": exc.detail}
     )
+
 
 app.include_router(user_router, prefix="/api")

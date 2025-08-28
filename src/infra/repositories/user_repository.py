@@ -14,19 +14,13 @@ class UserRepository(IUserRepository):
     def save(self, user: User) -> User:
 
         query = "INSERT INTO users (full_name, email, weight, height, birth_date) VALUES (%s, %s, %s, %s, %s) RETURNING id;"
-        params = (
-            user.full_name,
-            user.email,
-            user.weight,
-            user.height,
-            user.birth_date
-        )
+        params = (user.full_name, user.email, user.weight, user.height, user.birth_date)
         print(query, params)
         id = self.db.execute_query(query, params)[0][0]
         print(id)
         return user
 
-    def find_by_email(self, email: str) -> User | None:
+    def find_by_email(self, email: str) -> Optional[User]:
         query = "SELECT * FROM users WHERE email = %s;"
         params = (email,)
         result = self.db.execute_query(query, params)
