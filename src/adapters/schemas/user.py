@@ -1,5 +1,4 @@
-from pydantic import BaseModel, EmailStr, PastDatetime
-from typing import Optional
+from pydantic import BaseModel, EmailStr
 
 
 class UserCreateSchema(BaseModel):
@@ -13,9 +12,3 @@ class UserCreateSchema(BaseModel):
 class UserResponseSchema(BaseModel):
     email: EmailStr
     birth_date: str
-
-
-class FinalUserResponseSchema(BaseModel):
-    success: bool
-    error: Optional[str] = None
-    data: Optional[UserResponseSchema] = None
