@@ -15,14 +15,20 @@ class Database:
         self.connection = psycopg2.connect(**db_config)
 
         if self.connection is None:
-            return False
+            raise ConnectionError("Failed to connect to the database")
 
         self.cursor = self.connection.cursor()
 
     def execute_query(self, query, params=None):
-        self.cursor.execute(query, params)
-        self.connection.commit()
-        return self.cursor.fetchall()
+        try:
+            self.cursor.execute(query, params)
+            self.connection.commit()
+            return self.cursor.fetchall()
+        except Exception as e:
+            self.cursor.rollback()
+            self.close()
+            print(f"Error executing query: {e}")
+            return None
 
     def close(self):
         self.cursor.close()
