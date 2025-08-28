@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  fitfriend-api:
+    build: .
+    container_name: fastapi-fitfriend
+    env_file: .env
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/code/src
+
+  postgres:
+    image: postgres:latest
+    container_name: fitfriend-postgres
+    environment:
+      - POSTGRES_USER=fitfriend
+      - POSTGRES_PASSWORD=fitfriend
+      - POSTGRES_DB=fitfriend
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
+
