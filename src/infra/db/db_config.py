@@ -25,10 +25,10 @@ class Database:
             self.connection.commit()
             return self.cursor.fetchall()
         except Exception as e:
-            self.cursor.rollback()
+            # self.cursor.rollback()
             self.close()
             print(f"Error executing query: {e}")
-            return None
+            raise
 
     def close(self):
         self.cursor.close()

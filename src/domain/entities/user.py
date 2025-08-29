@@ -8,6 +8,7 @@ class User:
     email: str
     weight: float
     height: float
+    phone: str
     birth_date: str
     updated_at: Optional[str] = None
     created_at: Optional[str] = None

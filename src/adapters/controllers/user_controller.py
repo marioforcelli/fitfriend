@@ -1,3 +1,4 @@
+from src.domain.exceptions.user import UserAlreadyExistsError
 from src.adapters.schemas.user import UserCreateSchema, UserResponseSchema
 from src.adapters.schemas.base_schema import ResponseSchema
 from src.adapters.providers.user import UserProvider
@@ -19,7 +20,8 @@ async def create_user(
             email=user_data.email,
             weight=user_data.weight,
             height=user_data.height,
-            birth_date=user_data.birth_date,
+            birth_date=str(user_data.birth_date),
+            phone=user_data.phone,
         )
         result = use_case.create_user(user_entity)
         user_response: ResponseSchema[UserResponseSchema] = ResponseSchema(
@@ -29,7 +31,18 @@ async def create_user(
         return user_response
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+    except UserAlreadyExistsError as e:
+        raise HTTPException(status_code=409, detail=str(e))
     except Exception as e:
         raise HTTPException(
             status_code=500, detail="An unexpected error occurred: " + str(e)
         )
+
+@user_router.get("/users", response_model=ResponseSchema[UserResponseSchema])
+async def get_user(email: str, use_case: UserUseCases = Depends(UserProvider())) -> ResponseSchema[UserResponseSchema]:
+    print(email)
+    user = use_case.get_user_by_email(email)
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return ResponseSchema(success=True, data=UserResponseSchema(**vars(user)))
