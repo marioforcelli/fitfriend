@@ -1,5 +1,8 @@
 import psycopg2
 import os
+from psycopg2.extras import RealDictCursor
+
+from src.domain.exceptions.user import UserAlreadyExistsError
 
 DEFAULT_DB_CONFIG = {
     "dbname": os.environ.get("POSTGRES_DB", None),
@@ -21,13 +24,42 @@ class Database:
 
     def execute_query(self, query, params=None):
         try:
-            self.cursor.execute(query, params)
-            self.connection.commit()
-            return self.cursor.fetchall()
+
+            with self.connection.cursor() as cursor:
+
+                a = cursor.execute(query, params)
+                id = cursor.fetchone()[0]
+                print(id)
+                return a
+        except psycopg2.errors.UniqueViolation:
+            print("Unique constraint violated")
+            raise UserAlreadyExistsError
         except Exception as e:
             # self.cursor.rollback()
             self.close()
             print(f"Error executing query: {e}")
+            raise
+
+    def fetch_one(self, query, params=None):
+        try:
+            with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
+                cursor.execute(query, params)
+                return cursor.fetchone()
+        except Exception as e:
+            print(f"Error fetching one: {e}")
+            raise
+
+    def fetch_all(self, query, params=None):
+        try:
+            with self.connection.cursor(cursor_factory=RealDictCursor) as cursor:
+                cursor.execute(query, params)
+                return cursor.fetchall()
+        except Exception as e:
+            print(f"Error fetching all: {e}")
+            raise
+
+        except Exception as e:
+            self.connection.rollback()
             raise
 
     def close(self):
