@@ -13,7 +13,7 @@ class UserUseCases(IUserUseCase):
         # return self.user_repository.find_by_email()
 
     def get_user_by_email(self, email: str) -> Optional[User]:
-        pass
+        return self.user_repository.find_by_email(email)
 
     def get_user_by_id(self, user_id: int) -> Optional[User]:
         pass
@@ -22,7 +22,7 @@ class UserUseCases(IUserUseCase):
         return self.user_repository.save(user_data)
 
     def update_user(self, user_data: User) -> User:
-        pass
+        return self.user_repository.update(user_data)
 
     def delete_user(self, user_id: int) -> None:
-        pass
+        self.user_repository.delete(user_id)

@@ -23,3 +23,8 @@ class IUserRepository(ABC):
     def delete(self, user_id: int) -> None:
         """Remove usuário por ID"""
         pass
+
+    @abstractmethod
+    def update(self, user_data: User) -> User:
+        """Atualiza dados do usuário"""
+        pass
