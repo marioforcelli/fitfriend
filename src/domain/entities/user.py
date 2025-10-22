@@ -5,9 +5,8 @@ from typing import Optional
 @dataclass
 class User:
     full_name: str
+    chat_id: str
     email: str
-    weight: float
-    height: float
     phone: str
     birth_date: str
     updated_at: Optional[str] = None

@@ -15,12 +15,10 @@ class UserRepository(IUserRepository):
 
     def save(self, user: User) -> User:
         try:
-            query = "INSERT INTO users (full_name, email, weight, height, birth_date, phone) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id;"
+            query = "INSERT INTO users (full_name, email, birth_date, phone) VALUES (%s, %s, %s, %s) RETURNING id;"
             params = (
                 user.full_name,
                 user.email,
-                user.weight,
-                user.height,
                 user.birth_date,
                 user.phone,
             )
@@ -33,7 +31,7 @@ class UserRepository(IUserRepository):
     def find_by_email(self, email: str) -> Optional[User]:
         try:
             print(email)
-            query = "SELECT id, full_name, email, weight, height, birth_date, phone FROM users WHERE email = %s;"
+            query = "SELECT id, full_name, email, birth_date, phone FROM users WHERE email = %s;"
             params = (email,)
             print(query, params)
             result = self.db.fetch_one(query, params)
@@ -49,7 +47,7 @@ class UserRepository(IUserRepository):
 
     def find_by_id(self, user_id: int) -> Optional[User]:
         try:
-            query = "SELECT full_name, email, weight, height, birth_date, phone FROM users WHERE id = %s;"
+            query = "SELECT full_name, email, birth_date, phone FROM users WHERE id = %s;"
             params = (user_id,)
             result = self.db.fetch_one(query, params)
             if not result:
@@ -95,7 +93,7 @@ class UserRepository(IUserRepository):
 
             query = """
                 UPDATE users
-                SET full_name = %s, email = %s, weight = %s, height = %s, birth_date = %s, phone = %s
+                SET full_name = %s, email = %s, birth_date = %s, phone = %s
                 WHERE id = %s
                 RETURNING id;
             """
